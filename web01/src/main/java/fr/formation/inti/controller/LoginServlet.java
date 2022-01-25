@@ -40,13 +40,37 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		HttpSession session = request.getSession();	
+
+		String msg = (String) session.getAttribute("msg");
+		Date con = (Date) session.getAttribute("dateConnection");
+		if(msg == null){
+		  	response.sendRedirect(request.getContextPath() + "/index.html");
+		 } else {
+			 // on peut mettre un temps de validité à une session ! exemple : 10 min
+			 response.getWriter().append(msg).append("<br>").append(con.toString())
+		 						.append("<br>").append(session.getId());
+		 }
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// null.equals() "root".equals(null)
 		
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");
 		
+		HttpSession session = request.getSession();	
+		
 		// mettre une valeur NOT NULL en premier pour equals
 		 if ("root".equals(login) && "123456".equals(password)) {
+			 session.setAttribute("msg", "You are connected!");
+			 session.setAttribute("dateConnection", new Date());
+			 
 			Writer out = response.getWriter();
 			out.append("<html>").append("<head><title>login success</title>")
 					.append("<link href=\"css/style.css\" rel=\"stylesheet\">")
@@ -59,17 +83,8 @@ public class LoginServlet extends HttpServlet {
 			// request.getContextPath() retourne l'URL principale de notre webapp ici : /web01
 			response.sendRedirect(request.getContextPath() + "/index.html");
 		}
-
-		 
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
+		
+		//doGet(request, response);
 	}
 
 }
