@@ -47,11 +47,11 @@ public class LoginServlet extends HttpServlet {
 		String login = (String) session.getAttribute("login");
 		
 		if(session == null || login == null ) {
-			response.sendRedirect(request.getContextPath() + "/index.html");
-			// return;
+			response.sendRedirect(request.getContextPath() + "/index.jsp");
 		} else { 
-			 response.getWriter().append(msg).append("<br>").append(con.toString())
-				.append("<br>").append(session.getId()).append(login);
+			 response.getWriter().append(msg).append("<br> Date : ").append(con.toString())
+				.append("<br>Session Id : ").append(session.getId())
+				.append("<br>Login : ").append(login);
 		}
 	}
 
@@ -67,7 +67,7 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		
 		HttpSession session = request.getSession();	
-		session.setMaxInactiveInterval(30); // 30 secondes
+		session.setMaxInactiveInterval(60); // 60 secondes
 		
 		// mettre une valeur NOT NULL en premier pour equals
 		 if ("root".equals(login) && "123456".equals(password)) {
@@ -85,7 +85,7 @@ public class LoginServlet extends HttpServlet {
 
 		} else {
 			// request.getContextPath() retourne l'URL principale de notre webapp ici : /web01
-			response.sendRedirect(request.getContextPath() + "/index.html");
+			response.sendRedirect(request.getContextPath() + "/index.jsp");
 		}
 		
 		//doGet(request, response);
