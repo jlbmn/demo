@@ -41,16 +41,18 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		HttpSession session = request.getSession();	
-
+		
 		String msg = (String) session.getAttribute("msg");
-		Date con = (Date) session.getAttribute("dateConnection");
-		if(msg == null){
-		  	response.sendRedirect(request.getContextPath() + "/index.html");
-		 } else {
-			 // on peut mettre un temps de validité à une session ! exemple : 10 min
+		Date con = (Date) session.getAttribute("dateCo");
+		String login = (String) session.getAttribute("login");
+		
+		if(session == null || login == null ) {
+			response.sendRedirect(request.getContextPath() + "/index.html");
+			// return;
+		} else { 
 			 response.getWriter().append(msg).append("<br>").append(con.toString())
-		 						.append("<br>").append(session.getId());
-		 }
+				.append("<br>").append(session.getId()).append(login);
+		}
 	}
 
 	/**
@@ -65,19 +67,21 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		
 		HttpSession session = request.getSession();	
+		session.setMaxInactiveInterval(30); // 30 secondes
 		
 		// mettre une valeur NOT NULL en premier pour equals
 		 if ("root".equals(login) && "123456".equals(password)) {
 			 session.setAttribute("msg", "You are connected!");
-			 session.setAttribute("dateConnection", new Date());
+			 session.setAttribute("dateCo", new Date());
+			 session.setAttribute("login", login);
 			 
 			Writer out = response.getWriter();
 			out.append("<html>").append("<head><title>login success</title>")
 					.append("<link href=\"css/style.css\" rel=\"stylesheet\">")
 					.append("<link href=\"//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css\" rel=\"stylesheet\" id=\"bootstrap-css\">   ")
 					.append("</head><body>")
-					.append("<h1>Hello " + request.getParameter("login") + "</h1>").append("<p>You are connected!</p>")
-					.append("<p>Date : " + new Date() + "</p>");
+					.append("<h1>Hello " + session.getAttribute("login") + "</h1>").append("<p>You are connected!</p>")
+					.append("<p>Date : " + session.getAttribute("dateCo") + "</p>");
 
 		} else {
 			// request.getContextPath() retourne l'URL principale de notre webapp ici : /web01
