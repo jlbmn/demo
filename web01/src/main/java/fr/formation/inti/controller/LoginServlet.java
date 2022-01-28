@@ -67,7 +67,7 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		
 		HttpSession session = request.getSession();	
-		session.setMaxInactiveInterval(60); // 60 secondes
+		session.setMaxInactiveInterval(120); // 60 secondes
 		
 		// mettre une valeur NOT NULL en premier pour equals
 		 if ("root".equals(login) && "123456".equals(password)) {

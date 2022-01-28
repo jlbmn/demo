@@ -35,6 +35,7 @@ public class ContextListener implements ServletContextListener {
      */
     public void contextInitialized(ServletContextEvent sce)  { 
     	log.debug(" -----> Application started <----- ");
+    	
     }
 	
 }
